@@ -12,6 +12,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
+  axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const { isLoggedin, userData, backendUrl } = useContext(AppContent);
   const [veLoading, setveLoading] = useState(false);
@@ -25,7 +26,7 @@ const Navbar = () => {
       if (data.success) {
         toast.success("Verification Otp Sent Successfully", {
           position: "top-right",
-          autoClose: 1000
+          autoClose: 1000,
         });
         setveLoading(false);
         navigate("/email-verify");

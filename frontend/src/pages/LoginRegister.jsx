@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { TypeAnimation } from "react-type-animation";
 
 const LoginRegister = () => {
+  axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const { backendUrl, setIsLoggedin, getUserData, isLoggedin } =
     useContext(AppContent);
@@ -85,7 +86,10 @@ const LoginRegister = () => {
         {/*right*/}
         <div className="max-w-5xl rounded-xl flex justify-between h-[600px] bg-[url('/bg-c1.jpg')] bg-cover bg-center bg-no-repeat w-full">
           <div className="w-1/2 p-4 text-white rounded-xl flex flex-col gap-16">
-            <div onClick={()=>navigate('/')} className="flex items-center gap-3 cursor-pointer">
+            <div
+              onClick={() => navigate("/")}
+              className="flex items-center gap-3 cursor-pointer"
+            >
               <img src="/logo.png" alt="" className="w-10" />
               <span className="font-bold text-nav-col text-2xl">
                 Easy <span className="text-white">Judge</span>
@@ -111,10 +115,7 @@ const LoginRegister = () => {
             </div>
             <div className="w-3/4 h-full m-4 text-base flex items-center justify-center">
               <TypeAnimation
-                sequence={[
-                  "EasyJudge — Code smarter, compete better.",
-                  1000,
-                ]}
+                sequence={["EasyJudge — Code smarter, compete better.", 1000]}
                 wrapper="strong"
                 speed={40}
               />
