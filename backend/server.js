@@ -25,5 +25,5 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server running on port ${port} in ${process.env.NODE_ENV || 'development'} mode`);
 });
