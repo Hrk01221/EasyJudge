@@ -10,7 +10,7 @@ import userRouter from "./routes/userRoutes.js";
 const app = express();
 const port = process.env.PORT || 5000;
 connectDB();
-const allowedOrigins = ['http://localhost:5173']
+const allowedOrigins = ['https://easyjudge.onrender.com']
 
 app.use(express.json());
 app.use(cookieParser());
