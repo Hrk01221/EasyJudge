@@ -3,7 +3,7 @@ import { Facebook, Twitter, Linkedin, Mail } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-slate-900 text-white py-8">
+    <footer className="bg-slate-900 text-white py-8 translate-x-[250px]">
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="flex flex-col items-start">
           <div className="flex items-center gap-3 mb-3">

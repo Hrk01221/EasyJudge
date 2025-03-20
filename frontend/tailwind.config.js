@@ -22,7 +22,10 @@ export default {
         "login-reg-card": "#1a2b36",
         "nav-col": "#662D91",
       },
+      fontFamily: {
+        tektur: ["Tektur", "sans-serif"],
+      },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };

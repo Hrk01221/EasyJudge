@@ -1,11 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-*{
-  font-family: "Outfit", sans-serif; 
+* {
+  font-family: "Outfit", sans-serif;
   scroll-behavior: smooth;
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+html,
+body {
+  overflow: hidden; /* Prevent unwanted scrollbars */
+  height: 100vh;
+  width: 100vw;
+}
+
+@media (max-width: 850px) {
+  .custom-trans-x-navbar {
+    transform: translateX(0);
+    max-width: 98vw;
+    margin-left: 0.5rem;
+  }
+  .custom-trans-x1-sidebar {
+    transform: translateX(-250px);
+  }
+}

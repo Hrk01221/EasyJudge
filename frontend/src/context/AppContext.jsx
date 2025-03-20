@@ -10,6 +10,8 @@ export const AppContextProvider = (props) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState("Home");
+  const [sidebarShow, setSideBarShow] = useState(true);
 
   const getAuthState = async () => {
     const controller = new AbortController();
@@ -61,6 +63,10 @@ export const AppContextProvider = (props) => {
     setUserData,
     getUserData,
     loading,
+    page,
+    setPage,
+    sidebarShow,
+    setSideBarShow
   };
 
   return (

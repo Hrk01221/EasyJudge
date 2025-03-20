@@ -74,6 +74,15 @@ const LoginRegister = () => {
     }, 1500);
   };
 
+  const refresh = (isLogin) => {
+    setIsLogin(!isLogin);
+    setName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setShowPassword(false);
+  };
+
   useEffect(() => {
     if (isLoggedin) {
       navigate("/");
@@ -106,7 +115,7 @@ const LoginRegister = () => {
                     : "Already have an account?"}
                   <button
                     className="ml-1 text-violet-800 hover:underline font-bold"
-                    onClick={() => setIsLogin(!isLogin)}
+                    onClick={() => refresh(isLogin)}
                   >
                     {isLogin ? "Register here" : "Login here"}
                   </button>
