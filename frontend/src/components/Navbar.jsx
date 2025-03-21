@@ -13,15 +13,23 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { motion } from "framer-motion";
+import Loading from "./Loading";
 
 const Navbar = () => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
-  const { isLoggedin, userData, backendUrl, sidebarShow, setSideBarShow } =
-    useContext(AppContent);
+  const {
+    sidebarShow,
+    setSideBarShow,
+    backendUrl,
+    userData,
+    isLoggedin,
+    setIsLoggedin,
+    setUserData,
+  } = useContext(AppContent);
   const [veLoading, setveLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const sendOtp = async () => {
     setveLoading(true);
@@ -45,6 +53,37 @@ const Navbar = () => {
       setveLoading(false);
     }
   };
+
+  const logout = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.post(backendUrl + "/api/auth/logout");
+
+      if (data.success) {
+        setIsLoggedin(false);
+        setUserData(false);
+        toast.success("Logged Out Successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+
+        setTimeout(() => {
+          navigate("/");
+          setLoading(false);
+        }, 1500);
+      } else {
+        setLoading(false);
+        toast.error(data.error, {
+          position: "top-right",
+          autoClose: 1000,
+        });
+      }
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+  if(loading)return <Loading/>
 
   return (
     <div
@@ -83,22 +122,29 @@ const Navbar = () => {
           </div>
         )}
         {isLoggedin && (
-          <div className="rounded-full border border-[#808080] size-9 items-center flex justify-center cursor-pointer hover:bg-gray-100">
+          <div onClick={()=>logout()} className="rounded-full border border-[#808080] size-9 items-center flex justify-center cursor-pointer hover:bg-gray-100">
             <LogOut className="size-4" />
           </div>
         )}
+
         {isLoggedin && <div className="border-r-2 h-4/5"></div>}
+
         {isLoggedin && (
           <div className="flex items-center gap-3 px-4 py-2 w-fit">
-            <div className="w-8 h-8 flex items-center justify-center border border-black rounded-full text-sm font-bold">
-              <User />
-            </div>
+            <img
+              src="ppic.jpeg"
+              alt=""
+              className="w-10 h-10 flex items-center justify-center border-2 rounded-full"
+            />
             <span className="text-base font-sans">{userData.name}</span>
             <ChevronDown className="w-5 h-5 text-[#808080]" />
           </div>
         )}
         {!isLoggedin && (
-          <div className="flex items-center gap-2 mr-6 border border-[#808080] hover:bg-gray-100 px-8 py-2 rounded-2xl text-sm cursor-pointer transition transform duration-400 ease-in-out">
+          <div
+            onClick={() => navigate("/login-register")}
+            className="flex items-center gap-2 mr-6 border border-[#808080] hover:bg-gray-100 px-8 py-2 rounded-2xl text-sm cursor-pointer transition transform duration-400 ease-in-out"
+          >
             <p>Sign In </p>
             <ArrowRightFromLine className="size-4" />
           </div>
