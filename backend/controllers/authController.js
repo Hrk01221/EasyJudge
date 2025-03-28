@@ -347,9 +347,10 @@ export const CheckOtp = async (req, res) => {
     if (!user) {
       return res.json({ success: false, message: "User Not Found" });
     }
+    console.log(user.resetOtp);
     if (
-      otp === userModel.resetOtp &&
-      userModel.resetOtpExpireAt >= Date.now() &&
+      otp === user.resetOtp &&
+      user.resetOtpExpireAt >= Date.now() &&
       otp !== ""
     ) {
       return res.json({
@@ -358,8 +359,8 @@ export const CheckOtp = async (req, res) => {
       });
     } else
       return res.json({
-        success: true,
-        message: "Otp Verification Successful",
+        success: false,
+        message: "Invalid Otp",
       });
   } catch (error) {
     res.json({ success: false, message: error.message });

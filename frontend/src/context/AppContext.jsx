@@ -7,7 +7,7 @@ export const AppContent = createContext();
 export const AppContextProvider = (props) => {
   axios.defaults.withCredentials = true;
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const [isLoggedin, setIsLoggedin] = useState(false);
+  const [isLoggedin, setIsLoggedin] = useState(undefined);
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState("Home");
@@ -43,11 +43,20 @@ export const AppContextProvider = (props) => {
       const { data } = await axios.get(backendUrl + "/api/user/data", {
         withCredentials: true,
       });
-      data.success ? setUserData(data.userData) : toast.error(data.message);
+      if (data.success) {
+        setUserData(data.userData);
+        setIsLoggedin(true);
+      } else {
+        setIsLoggedin(false);
+        toast.error(data.message);
+      }
     } catch (error) {
+      setIsLoggedin(false);
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred.";
       toast.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,7 +75,7 @@ export const AppContextProvider = (props) => {
     page,
     setPage,
     sidebarShow,
-    setSideBarShow
+    setSideBarShow,
   };
 
   return (

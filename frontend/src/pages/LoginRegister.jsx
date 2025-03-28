@@ -1,10 +1,16 @@
-import { Eye, EyeOff, Loader2, Mail, User } from "lucide-react";
+import {
+  CircleArrowLeft,
+  Eye,
+  EyeOff,
+  Loader2,
+  Mail,
+  User2,
+} from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContent } from "../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { TypeAnimation } from "react-type-animation";
 
 const LoginRegister = () => {
   axios.defaults.withCredentials = true;
@@ -47,7 +53,7 @@ const LoginRegister = () => {
             });
             navigate("/");
           } else {
-            toast.error(data.message);
+            toast.error(data.message,{autoClose:1000});
           }
         } else {
           const { data } = await axios.post(backendUrl + "/api/auth/login", {
@@ -63,11 +69,11 @@ const LoginRegister = () => {
             });
             navigate("/");
           } else {
-            toast.error(data.message);
+            toast.error(data.message,{autoClose:1000});
           }
         }
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error.message,{autoClose:1000});
       } finally {
         setLoading(false);
       }
@@ -90,103 +96,108 @@ const LoginRegister = () => {
   }, [isLoggedin]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-sky-400">
-      <div className="flex-grow min-h-screen flex items-center justify-center p-4 relative">
-        {/*right*/}
-        <div className="max-w-5xl rounded-xl flex justify-between h-[600px] bg-[url('/bg-c1.jpg')] bg-cover bg-center bg-no-repeat w-full">
-          <div className="w-1/2 p-4 text-white rounded-xl flex flex-col gap-16">
-            <div
-              onClick={() => navigate("/")}
-              className="flex items-center gap-3 cursor-pointer"
-            >
-              <img src="/logo.png" alt="" className="w-10" />
-              <span className="font-bold text-nav-col text-2xl">
-                Easy <span className="text-white">Judge</span>
-              </span>
+    <div className="h-screen flex">
+      <div className=" w-1/2 h-full flex flex-col">
+        <div className="w-full h-24 ml-4 mt-4 mb-2">
+          <div className="flex items-center gap-1">
+            <img src="/logo.png" alt="logo" className="size-11 shrink-0 mr-2" />
+            <div className="text-2xl font-bold">
+              <span className="text-[#90ddaa] font-tektur ">Easy</span>
+              <span className="text-[#b180f0] font-tektur ">Judge</span>
             </div>
-            <div className="flex flex-col items-center">
-              <h2 className="text-3xl font-bold">
-                {isLogin ? "Welcome Back!" : "Join Us Today!"}
-              </h2>
-              <div className="mt-4">
-                <p>
-                  {isLogin
-                    ? "Don't have an account?"
-                    : "Already have an account?"}
-                  <button
-                    className="ml-1 text-violet-800 hover:underline font-bold"
-                    onClick={() => refresh(isLogin)}
-                  >
-                    {isLogin ? "Register here" : "Login here"}
-                  </button>
-                </p>
-              </div>
-            </div>
-            <div className="w-3/4 h-full m-4 text-base flex items-center justify-center">
-              <TypeAnimation
-                sequence={["EasyJudge — Code smarter, compete better.", 1000]}
-                wrapper="strong"
-                speed={40}
-              />
-            </div>
-
-            <div className="text-gray-500 text-sm">copyright | 2025</div>
           </div>
+        </div>
 
-          {/*left*/}
-          <div className="w-1/2 p-4 h-full flex flex-col justify-end">
-            <h2 className="text-2xl mt-10 font-bold text-center mb-4 text-font-big text-black">
-              {isLogin ? "Login" : "Register"}
-            </h2>
-
-            <form
-              className="flex-grow flex flex-col justify-center"
-              onSubmit={onSubmitHandler}
+        <div className="h-full w-full flex flex-col items-center gap-2">
+          <h1 className="text-2xl font-sans font-medium">
+            {isLogin ? "Sign In" : "Sign Up"}
+          </h1>
+          <div className="flex gap-2 items-center">
+            <p className="text-slate-400">
+              {!isLogin ? "Don't" : "Already"} have an account?
+            </p>
+            <p
+              onClick={() => refresh(isLogin)}
+              className="text-blue-700 cursor-pointer hover:underline"
             >
-              {!isLogin && (
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-black mb-2">
-                    Name
-                  </label>
-                  <div className="relative w-full">
-                    <input
-                      onChange={(e) => setName(e.target.value)}
-                      value={name}
-                      className="w-full p-2 border rounded-md bg-white  text-black ring-1 ring-black focus:outline-none focus:ring-1 focus:border-border-custom2 focus:shadow-lg"
-                      type="name"
-                      placeholder="Enter Your Name"
-                    />
-                    <User className="absolute right-3 top-1/2 transform -translate-y-1/2 text-dark-input-placeholder size-5" />
-                  </div>
-                </div>
-              )}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-black mb-2">
-                  Email
+              {isLogin ? "register" : "login"}
+            </p>
+          </div>
+          <form
+            onSubmit={onSubmitHandler}
+            className={`h-full w-full flex flex-col ${
+              isLogin ? "mt-10" : "mt-2"
+            }`}
+          >
+            {!isLogin && (
+              <div className="mb-4 mx-32">
+                <label className="block text-sm font-normal text-black mb-1 ml-2">
+                  UserName <span className="text-red-600">*</span>
                 </label>
                 <div className="relative w-full">
                   <input
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                    className="w-full p-2 border rounded-md bg-white  text-black ring-1 ring-black focus:outline-none focus:ring-1 focus:border-border-custom2 focus:shadow-lg"
-                    type="email"
-                    placeholder="Enter Your Email"
+                    onChange={(e) => setName(e.target.value)}
+                    value={name}
+                    className="w-full py-2 px-5 border rounded-3xl bg-white placeholder:text-slate-300 placeholder:text-base text-black focus:outline-none"
+                    type="name"
+                    placeholder="Enter Your Name"
                   />
-                  <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 text-dark-input-placeholder size-5" />
+                  <User2 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-dark-input-placeholder size-5" />
                 </div>
               </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-black mb-2">
-                  Password
+            )}
+            <div className="mb-4 mx-32">
+              <label className="block text-sm font-normal text-black mb-1 ml-2">
+                Email <span className="text-red-600">*</span>
+              </label>
+              <div className="relative w-full">
+                <input
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  className="w-full py-2 px-5 border rounded-3xl bg-white placeholder:text-slate-300 placeholder:text-base text-black focus:outline-none"
+                  type="email"
+                  placeholder="Enter Your Email"
+                />
+                <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 text-dark-input-placeholder size-5" />
+              </div>
+            </div>
+            <div className="mb-4 mx-32">
+              <label className="block text-sm font-normal text-black mb-1 ml-2">
+                Password <span className="text-red-600">*</span>
+              </label>
+              <div className="relative w-full">
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  className="w-full py-2 px-5 border rounded-3xl bg-white placeholder:text-slate-300 placeholder:text-base text-black focus:outline-none"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter Your Passwrd"
+                />
+                {showPassword ? (
+                  <Eye
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-dark-input-placeholder cursor-pointer size-5"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                ) : (
+                  <EyeOff
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-dark-input-placeholder cursor-pointer size-5"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                )}
+              </div>
+            </div>
+            {!isLogin && (
+              <div className="mb-4 mx-32">
+                <label className="block text-sm font-normal text-black mb-1 ml-2">
+                  Confirm Password <span className="text-red-600">*</span>
                 </label>
                 <div className="relative w-full">
                   <input
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    className="w-full p-2 border rounded-md bg-white  text-black ring-1 ring-black focus:outline-none focus:ring-1 focus:border-border-custom2 focus:shadow-lg"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    value={confirmPassword}
+                    className="w-full py-2 px-5 border rounded-3xl bg-white placeholder:text-slate-300 placeholder:text-base text-black focus:outline-none"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter Your Password"
+                    placeholder="Confirm Your Passwrd"
                   />
                   {showPassword ? (
                     <Eye
@@ -201,59 +212,61 @@ const LoginRegister = () => {
                   )}
                 </div>
               </div>
-
-              {!isLogin && (
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-black mb-2">
-                    Confirm Password
-                  </label>
-                  <div className="relative w-full">
-                    <input
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      value={confirmPassword}
-                      className="w-full p-2 border rounded-md bg-white  text-black ring-1 ring-black focus:outline-none focus:ring-1 focus:border-border-custom2 focus:shadow-lg"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Confirm Your Password"
-                    />
-                    {showPassword ? (
-                      <Eye
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-dark-input-placeholder cursor-pointer size-5"
-                        onClick={() => setShowPassword(!showPassword)}
-                      />
-                    ) : (
-                      <EyeOff
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-dark-input-placeholder cursor-pointer size-5"
-                        onClick={() => setShowPassword(!showPassword)}
-                      />
-                    )}
-                  </div>
-                </div>
-              )}
-              {isLogin && (
-                <div className="mt-2">
-                  <p
-                    onClick={() => navigate("/reset-password")}
-                    className="ml-1 text-nav-col hover:text-violet-500 cursor-pointer"
-                  >
-                    Forgot Password?
-                  </p>
-                </div>
-              )}
-              <div className="flex justify-center mt-4">
-                <button
-                  className={`w-[150px] mt-4 p-2 bg-blue-700 font-bold text-white rounded-3xl hover:bg-blue-500 flex items-center justify-center gap-2 transition-all duration-300 ${
-                    loading ? "opacity-90 cursor-not-allowed" : ""
-                  }`}
-                  type="submit"
-                  disabled={loading}
-                >
-                  {loading && <Loader2 className="animate-spin size-5" />}
-                  {loading ? "Loading..." : isLogin ? "Login" : "Register"}
-                </button>
+            )}
+            {isLogin && (
+              <div
+                onClick={() => navigate("/reset-password")}
+                className="mx-32 w-1/4 text-blue-700 cursor-pointer hover:underline"
+              >
+                <span className="ml-1 w-full">Forgot Password?</span>
               </div>
-            </form>
-          </div>
+            )}
+            <div className="flex justify-center mt-4">
+              <button
+                className={`w-[300px] mt-4 p-2 bg-black border text-white rounded-3xl hover:bg-white hover:text-black hover:border hover:border-black flex items-center justify-center gap-2 transition-all duration-300 ${
+                  loading ? "opacity-90 cursor-not-allowed" : ""
+                }`}
+                type="submit"
+                disabled={loading}
+              >
+                {loading && <Loader2 className="animate-spin size-5" />}
+                {loading ? "Loading..." : isLogin ? "Login" : "Register"}
+              </button>
+            </div>
+            <div
+              className={` ${
+                isLogin ? "mt-8" : "mt-4"
+              } flex items-center justify-center m-auto mb-2 w-full`}
+            >
+              <div className="w-1/4 h-[0.5px] bg-slate-400"></div>
+              <div className="text-slate-400 mx-1 text-center">or</div>
+              <div className="w-1/4 h-[0.5px] bg-slate-400"></div>
+            </div>
+            <div
+              className={`${
+                isLogin ? "mt-8" : "mb-16 mt-4"
+              } w-full flex items-center justify-center gap-6`}
+            >
+              <div className="px-10 py-3 flex items-center gap-1 border border-slate-400 rounded-lg hover:bg-slate-100 hover:border-slate-300 cursor-pointer">
+                <img src="/google.svg" alt="" className="size-6" />
+                <p>Google</p>
+              </div>
+              <div className="px-8 py-3 flex items-center gap-1 border border-slate-400 rounded-lg hover:bg-slate-100 hover:border-slate-300 cursor-pointer">
+                <img src="/github.svg" alt="" className="size-6" />
+                <p>Github</p>
+              </div>
+            </div>
+          </form>
         </div>
+      </div>
+      <div className="bg-[url('/bg-auth.jpg')] bg-cover bg-center bg-no-repeat w-[calc(200vw/3)] h-screen ml-0 mt-10 border rounded-2xl rounded-r-none flex">
+        <CircleArrowLeft
+          onClick={() => navigate("/")}
+          className="m-3 size-8 cursor-pointer text-slate-700 hover:text-black"
+        />
+        <h1 className="text-3xl m-12 text-slate-900 font-mono font-semibold">
+          Welcome Back!!
+        </h1>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import {
   ArrowRightFromLine,
   Bell,
   ChevronDown,
+  CircleArrowRight,
   LogOut,
   Menu,
   MoonStar,
@@ -116,13 +117,13 @@ const Navbar = () => {
       </div>
       <div className="w-full sm:w-1/2 flex h-full justify-end mr-2 items-center gap-5">
         {isLoggedin && (
-          <div className="rounded-full border border-[#808080] size-9 items-center flex justify-center cursor-pointer hover:bg-gray-100">
+          <div className="rounded-lg border border-[#808080] size-9 items-center flex justify-center cursor-pointer hover:bg-gray-100">
             <Bell className="size-4" />
             {/* todo : notify */}
           </div>
         )}
         {isLoggedin && (
-          <div onClick={()=>logout()} className="rounded-full border border-[#808080] size-9 items-center flex justify-center cursor-pointer hover:bg-gray-100">
+          <div onClick={()=>logout()} className="rounded-lg border border-[#808080] size-9 items-center flex justify-center cursor-pointer hover:bg-gray-100">
             <LogOut className="size-4" />
           </div>
         )}
@@ -143,71 +144,13 @@ const Navbar = () => {
         {!isLoggedin && (
           <div
             onClick={() => navigate("/login-register")}
-            className="flex items-center gap-2 mr-6 border border-[#808080] hover:bg-gray-100 px-8 py-2 rounded-2xl text-sm cursor-pointer transition transform duration-400 ease-in-out"
+            className="flex items-center gap-2 mr-6 border border-slate-400 hover:bg-slate-100 hover:border-slate-300 px-8 py-2 rounded-2xl text-sm cursor-pointer transition transform duration-400 ease-in-out"
           >
             <p>Sign In </p>
-            <ArrowRightFromLine className="size-4" />
           </div>
         )}
       </div>
     </div>
   );
 };
-
-{
-  /* <button class="btn relative inline-flex items-center justify-start overflow-hidden font-medium transition-all bg-indigo-100 rounded hover:bg-white group py-1.5 px-2.5">
-        <span class="w-56 h-48 rounded bg-indigo-600 absolute bottom-0 left-0 translate-x-full ease-out duration-500 transition-all translate-y-full mb-9 ml-9 group-hover:ml-0 group-hover:mb-32 group-hover:translate-x-0"></span>
-        <span class="relative w-full text-left text-indigo-600 transition-colors duration-300 ease-in-out group-hover:text-white">
-          Button Hover
-        </span>
-      </button> */
-}
-// <div className="flex justify-between items-center translate-x-[250px]">
-//   <div
-//     onClick={() => navigate("/")}
-//     className="m-6 flex items-center gap-3 text-white font-bold text-2xl cursor-pointer"
-//   >
-//     <img src="/logo.png" className="w-8" alt="EasyJudge Logo" />
-//     <span className="text-nav-col">
-//       Easy<span className="text-black">Judge</span>
-//     </span>
-//   </div>
-//   <div className="flex justify-center items-center gap-28">
-//     {(!isLoggedin || !userData.isAccountVerified) && (
-//       <div className="flex gap-1 text-black font-bold cursor-pointer hover:text-nav-col hover:underline">
-//         <BookOpen />
-//         About
-//       </div>
-//     )}
-//     {(!isLoggedin || !userData.isAccountVerified) && (
-//       <div className="flex gap-1 text-black font-bold cursor-pointer hover:text-nav-col hover:underline">
-//         {" "}
-//         <Headset /> Contact-Us{" "}
-//       </div>
-//     )}
-//     {(!isLoggedin || !userData.isAccountVerified) && (
-//       <div
-//         disabled={veLoading}
-//         onClick={() => {
-//           if (!veLoading) {
-//             isLoggedin ? sendOtp() : navigate("/login-register");
-//           }
-//         }}
-//         type="button"
-//         className="flex gap-1 text-black font-bold cursor-pointer hover:text-nav-col hover:underline m-5 mr-12"
-//       >
-//         {isLoggedin ? (
-//           veLoading ? (
-//             <Loader2 className="animate-spin text-nav-col" />
-//           ) : (
-//             <TriangleAlertIcon className="text-red-600" />
-//           )
-//         ) : (
-//           <LogInIcon />
-//         )}
-//         {!isLoggedin ? "Login/Register" : "Verify-Email"}
-//       </div>
-//     )}
-//   </div>
-// </div>
 export default Navbar;

@@ -11,19 +11,19 @@ import Loading from "./components/Loading";
 
 const App = () => {
   const { isLoggedin, loading, userData } = useContext(AppContent);
-  const [isloading, setIsLoading] = useState(true);
-  const location = useLocation();
-  useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [location.pathname]);
+  // const [isloading, setIsLoading] = useState(true);
+  // const location = useLocation();
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   const timer = setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 1000);
+  //   return () => clearTimeout(timer);
+  // }, [location.pathname]);
 
   return (
     <div>
-      {(loading || isloading) && <Loading />}
+      {/* {(loading || isloading) && <Loading />} */}
       <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />

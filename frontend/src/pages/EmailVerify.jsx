@@ -3,14 +3,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AppContent } from "../context/AppContext";
-import { CircleChevronLeft, Loader2 } from "lucide-react";
-import Footer from "../components/footer";
+import { Loader2 } from "lucide-react";
 
 const EmailVerify = () => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const inputRefs = React.useRef([]);
-  const { backendUrl, isLoggedin, userData, getUserData } =
+  const { backendUrl, userData, isLoggedin, getUserData, loading } =
     useContext(AppContent);
   const [Loading, setLoading] = useState(false);
 
@@ -50,151 +49,82 @@ const EmailVerify = () => {
       if (data.success) {
         toast.success("Verified Successfully!", {
           position: "top-right",
+          autoClose: 1000,
         });
         getUserData();
         navigate("/");
       } else {
-        toast.error(data.message);
+        toast.error(data.message,{autoClose:1000});
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message,{autoClose:1000});
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (loading) return;
     if (!isLoggedin || userData.isAccountVerified) {
       navigate("/");
     }
-  }, [isLoggedin, userData]);
+  }, [isLoggedin, userData, getUserData]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-sky-400 flex justify-center items-center">
-      <div className="w-3/5 h-[600px] bg-[url('/bg-c2.png')] bg-cover bg-center bg-no-repeat rounded-md flex">
-        <div className="w-1/2 p-6 flex flex-col items-center justify-center gap-5">
-          <h1 className="text-white text-3xl font-bold mt-10">
-            Verify Email
-          </h1>
-          <p className="text-base text-gray-600 mb-10">
-            Verify Your Email to get started.....
-          </p>
-          <div 
-            onClick={() => {
-              navigate("/");
-            }}
-            className="text-white flex gap-3 items-center cursor-pointer hover:text-nav-col"
-          >
-            <CircleChevronLeft /> go back{" "}
-          </div>
+    <div className="h-screen w-100vw flex items-center justify-center bg-slate-50">
+      <div className="absolute top-5 left-5 flex items-center gap-1">
+        <img src="/logo.png" alt="logo" className="size-11 shrink-0 mr-2" />
+        <div className="text-2xl font-bold">
+          <span className="text-[#90ddaa] font-tektur ">Easy</span>
+          <span className="text-[#b180f0] font-tektur ">Judge</span>
         </div>
-        <div className="w-1/2 flex flex-col pl-10 justify-center items-center">
-          <form
-            onSubmit={onSubmitHandler}
-            className="flex flex-col items-center p-3 justify-center gap-7"
-          >
-            <h1 className="text-black text-xl font-bold text-center mb-4">
-              Verify OTP
-            </h1>
-            <p className="text-center text-gray-700 mb-6">
-              Enter the 6-digit OTP sent to your email
-            </p>
-            <div
-              className="flex gap-2 justify-center mb-7"
-              onPaste={handlePaste}
+      </div>
+      <div className="w-1/2 h-full flex justify-center items-center">
+        <div className="w-[40vw] h-[70vh] flex flex-col justify-evenly border border-slate-600 rounded-3xl bg-slate-50">
+          <div className="h-1/4 w-full flex justify-center items-center">
+            <h1 className="font-semibold text-3xl">Verify Email</h1>
+          </div>
+          <div className="h-full w-full flex flex-col justify-center items-center">
+            <form
+              onSubmit={onSubmitHandler}
+              className="flex flex-col items-center p-3"
             >
-              {Array(6)
-                .fill(0)
-                .map((_, index) => (
-                  <input
-                    key={index}
-                    ref={(el) => (inputRefs.current[index] = el)}
-                    className="w-12 h-12 text-center text-xl ring-1 ring-black text-black rounded-md focus:outline-none"
-                    maxLength="1"
-                    type="text"
-                    onInput={(e) => handleInput(e, index)}
-                    onKeyDown={(e) => handleKeyDown(e, index)}
-                  />
-                ))}
-            </div>
-            <button
-              className={`w-1/3 py-3 text-white rounded-md bg-blue-500 hover:bg-blue-700 ${
-                    Loading && "bg-gray-500 cursor-not-allowed"}`}
-              disabled={Loading}
-            >
-              <div className="flex justify-center gap-2">
-                {Loading && <Loader2 className="animate-spin size-5" />}
-                {Loading ? "Verifying..." : "Verify"}
+              <p className="text-center text-gray-700 mb-6">
+                Enter the 6-digit OTP sent to your email
+              </p>
+              <div
+                className="flex gap-2 justify-center mb-7"
+                onPaste={handlePaste}
+              >
+                {Array(6)
+                  .fill(0)
+                  .map((_, index) => (
+                    <input
+                      key={index}
+                      ref={(el) => (inputRefs.current[index] = el)}
+                      className="w-12 h-12 text-center text-xl border border-slate-400 text-black rounded-md focus:outline-none focus:border-slate-700"
+                      maxLength="1"
+                      type="text"
+                      onInput={(e) => handleInput(e, index)}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
+                    />
+                  ))}
               </div>
-            </button>
-          </form>
+              <button
+                className={`w-[300px] mt-4 p-2 bg-black border text-white rounded-3xl hover:bg-white hover:text-black hover:border hover:border-black flex items-center justify-center gap-2 transition-all duration-300 ${
+                  Loading ? "opacity-90 cursor-not-allowed" : ""
+                }`}
+                type="submit"
+                disabled={Loading}
+              >
+                {Loading && <Loader2 className="animate-spin size-5" />}
+                {Loading ? "Verifying..." : "Submit"}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-    // <div className="flex flex-col min-h-screen bg-custom-bg">
-    //   <div className="flex flex-col min-h-screen justify-center items-center flex-grow mb-16">
-    //     <div
-    //       onClick={() => navigate("/")}
-    //       className="absolute left-6 top-6 flex items-center gap-3 text-white font-bold text-2xl cursor-pointer"
-    //     >
-    //       <img src="/logo.png" className="w-8" alt="EasyJudge Logo" />
-    //       <span className="text-nav-col">
-    //         Easy<span className="text-white">Judge</span>
-    //       </span>
-    //     </div>
-    //     <form
-    //       className="rounded-lg shadow-lg w-1/3 h-[340px] text-sm bg-gray-500
-    //       flex
-    //       flex-col
-    //       justify-center
-    //       items-center
-    //       border
-    //       bg-clip-padding
-    //       backdrop-filter
-    //       backdrop-blur
-    //       bg-opacity-10
-    //       backdrop-saturate-100
-    //       backdrop-contrast-100"
-    //       onSubmit={onSubmitHandler}
-    //     >
-    //       <h1 className="text-white text-2xl font-semibold text-center mb-4">
-    //         Email Verify
-    //       </h1>
-    //       <p className="text-center mb-6 text-indigo-300">
-    //         Enter the six-digit code sent to your email
-    //       </p>
-    //       <div
-    //         className="flex justify-between mb-8 gap-3"
-    //         onPaste={handlePaste}
-    //       >
-    //         {Array(6)
-    //           .fill(0)
-    //           .map((_, index) => (
-    //             <input
-    //               className="w-12 h-12 bg-[#333A5C] text-white text-center text-xl rounded-md focus:outline-none"
-    //               type="text"
-    //               maxLength="1"
-    //               key={index}
-    //               ref={(e) => (inputRefs.current[index] = e)}
-    //               onInput={(e) => handleInput(e, index)}
-    //               onKeyDown={(e) => handleKeyDown(e, index)}
-    //             />
-    //           ))}
-    //       </div>
-    //       <button
-    //         className={`w-1/3 py-3 text-white rounded-full border border-transparent ${
-    //           Loading ? "bg-gray-500 cursor-not-allowed" : "bg-border-custom2"
-    //         } hover:bg-transparent hover:border-white transition-all duration-300`}
-    //         disabled={Loading}
-    //       >
-    //         <div className="flex justify-center gap-2">
-    //           {Loading && <Loader2 className="animate-spin size-5" />}
-    //           {Loading ? "Verifying..." : "Verify"}
-    //         </div>
-    //       </button>
-    //     </form>
-    //   </div>
-    // </div>
   );
 };
 
