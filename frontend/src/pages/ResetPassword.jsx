@@ -51,12 +51,21 @@ const ResetPassword = () => {
       );
       if (data.success) {
         setSentOtp(true);
-        toast.success("OTP sent successfully!",{autoClose:1000});
+        toast.success("OTP sent successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
       } else {
-        toast.error(data.message,{autoClose:1000});
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 1000,
+        });
       }
     } catch (error) {
-      toast.error(error.message,{autoClose:1000});
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 1000,
+      });
     } finally {
       setLoading(false);
     }
@@ -85,7 +94,10 @@ const ResetPassword = () => {
         });
       }
     } catch (error) {
-      toast.error(message.error,{autoClose:1000});
+      toast.error(message.error, {
+        position: "top-right",
+        autoClose: 1000,
+      });
     } finally {
       setLoading(false);
     }
@@ -117,7 +129,10 @@ const ResetPassword = () => {
         });
       }
     } catch (error) {
-      toast.error(error.message,{autoClose:1000});
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 1000,
+      });
     } finally {
       setLoading(false);
     }

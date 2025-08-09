@@ -53,7 +53,10 @@ const LoginRegister = () => {
             });
             navigate("/");
           } else {
-            toast.error(data.message,{autoClose:1000});
+            toast.error(data.message, {
+              position: "top-right",
+              autoClose: 1000,
+            });
           }
         } else {
           const { data } = await axios.post(backendUrl + "/api/auth/login", {
@@ -69,11 +72,17 @@ const LoginRegister = () => {
             });
             navigate("/");
           } else {
-            toast.error(data.message,{autoClose:1000});
+            toast.error(data.message, {
+              position: "top-right",
+              autoClose: 1000,
+            });
           }
         }
       } catch (error) {
-        toast.error(error.message,{autoClose:1000});
+        toast.error(error.message,{
+          position: "top-right",
+          autoClose: 1000,
+        });
       } finally {
         setLoading(false);
       }

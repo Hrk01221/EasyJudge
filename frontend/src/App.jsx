@@ -4,10 +4,11 @@ import LoginRegister from "./pages/LoginRegister";
 import Home from "./pages/Home";
 import EmailVerify from "./pages/EmailVerify";
 import ResetPassword from "./pages/ResetPassword";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AppContent } from "./context/AppContext";
 import Loading from "./components/Loading";
+import Profile from "./pages/Profile";
 
 const App = () => {
   const { isLoggedin, loading, userData } = useContext(AppContent);
@@ -24,12 +25,25 @@ const App = () => {
   return (
     <div>
       {/* {(loading || isloading) && <Loading />} */}
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable={false}
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login-register" element={<LoginRegister />} />
         <Route path="/email-verify" element={<EmailVerify />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );

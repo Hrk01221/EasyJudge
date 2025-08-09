@@ -46,7 +46,10 @@ const Home = () => {
         });
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 1000,
+      });
       setLoading(false);
     }
   };
@@ -57,15 +60,14 @@ const Home = () => {
     <div className="h-screen w-screen flex overflow-hidden pt-1">
       <Sidebar />
       <div className="flex-1 overflow-y-auto scrollbar-hide">
-        <Navbar />
+        <Navbar/>
         <div
-          className={` h-[1000vh] w-full custom-trans-x-navbar ${
+          className={` h-[1000vh] w-[100vw] custom-trans-x-navbar ${
             sidebarShow
               ? "translate-x-[260px] max-w-[calc(100vw-266px)]"
               : "translate-x-0 max-w-[calc(99vw-0px)] ml-2 transition-transform duration-400 ease-in-out"
           } border`}
-        >
-        </div>
+        ></div>
       </div>
     </div>
   );

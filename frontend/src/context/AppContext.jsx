@@ -31,7 +31,10 @@ export const AppContextProvider = (props) => {
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Network timeout or error.";
-      toast.error(errorMessage);
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 1000,
+      });
     } finally {
       clearTimeout(timeout);
       setLoading(false);
@@ -48,13 +51,19 @@ export const AppContextProvider = (props) => {
         setIsLoggedin(true);
       } else {
         setIsLoggedin(false);
-        toast.error(data.message);
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 1000,
+        });
       }
     } catch (error) {
       setIsLoggedin(false);
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred.";
-      toast.error(errorMessage);
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 1000,
+      });
     } finally {
       setLoading(false);
     }

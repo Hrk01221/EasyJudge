@@ -58,8 +58,8 @@ const createWelcomeEmail = (userName) => `
 <body>
     <div class="container">
         <div class="header">
-            <img class="img" src="https://i.ibb.co.com/2xswC2Y/logo.png" alt="logo" border="0">
-            <h2>EasyJudge</h2>
+          <a href='https://postimg.cc/MM4J12N5' target='_blank'><img src='https://i.postimg.cc/MM4J12N5/logo.png' border='0' alt='logo style="height:40px'/></a> 
+          <h2>EasyJudge</h2>
         </div>
         <hr style="border: 1px solid #ddd; margin: 5px 0;">
         <div class="content">
