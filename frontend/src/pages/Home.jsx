@@ -57,17 +57,21 @@ const Home = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="h-screen w-screen flex overflow-hidden pt-1">
-      <Sidebar />
-      <div className="flex-1 overflow-y-auto scrollbar-hide">
-        <Navbar/>
+    <div className="flex pt-1">
+      {isLoggedin && <Sidebar />}
+      <div className="flex-1">
+        <Navbar />
         <div
-          className={` h-[1000vh] w-[100vw] custom-trans-x-navbar ${
-            sidebarShow
-              ? "translate-x-[260px] max-w-[calc(100vw-266px)]"
-              : "translate-x-0 max-w-[calc(99vw-0px)] ml-2 transition-transform duration-400 ease-in-out"
-          } border`}
-        ></div>
+          className={`p-4 border transition-all duration-400 ease-in-out ${
+            sidebarShow ? "ml-[260px]" : "ml-0"
+          }`}
+        >
+          {Array.from({ length: 200 }).map((_, i) => (
+            <div key={i} className="bg-black text-white p-4 my-2">
+              Welcome to EasyJudge #{i + 1}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

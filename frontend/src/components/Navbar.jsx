@@ -99,7 +99,7 @@ const Navbar = () => {
       } border rounded-xl rounded-br-none rounded-bl-none flex items-center p-2 transition-transform duration-400 ease-in-out`}
     >
       <div className="hidden sm:w-1/2 sm:flex gap-10 items-center">
-        {!sidebarShow && (
+        {!sidebarShow && isLoggedin && (
           <Menu
             className="cursor-pointer opacity-70 ml-5"
             onClick={() => setSideBarShow(true)}

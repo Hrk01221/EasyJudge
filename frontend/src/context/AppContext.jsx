@@ -11,7 +11,7 @@ export const AppContextProvider = (props) => {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState("Home");
-  const [sidebarShow, setSideBarShow] = useState(true);
+  const [sidebarShow, setSideBarShow] = useState(false);
 
   const getAuthState = async () => {
     const controller = new AbortController();

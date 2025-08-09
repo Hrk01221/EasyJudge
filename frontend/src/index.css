@@ -10,20 +10,28 @@
   scroll-behavior: smooth;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+/* Hide scrollbar globally */
+html,
+body {
+  overflow-x: hidden; /* No horizontal scroll */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
+/* Chrome, Safari */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Utility: hide scrollbar on specific elements */
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
 
-html,
-body {
-  overflow: hidden; /* Prevent unwanted scrollbars */
-  height: 100vh;
-  width: 100vw;
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
 }
 
 @media (max-width: 850px) {
