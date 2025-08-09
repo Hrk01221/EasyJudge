@@ -9,7 +9,7 @@ export const AppContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [isLoggedin, setIsLoggedin] = useState(undefined);
   const [userData, setUserData] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState("Home");
   const [sidebarShow, setSideBarShow] = useState(false);
 

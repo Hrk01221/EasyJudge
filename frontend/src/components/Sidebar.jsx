@@ -60,12 +60,12 @@ const Sidebar = () => {
       {/*logo*/}
       <div className="w-full h-[calc(100vh/13)] flex items-center justify-between border border-[#808080] rounded-md px-2 mt-2">
         <div className="flex items-center gap-1">
-            <img src="/logo.png" alt="logo" className="size-9 shrink-0 mr-2" />
-            <div className="text-xl font-bold">
-              <span className="text-[#90ddaa] font-tektur ">Easy</span>
-              <span className="text-[#b180f0] font-tektur ">Judge</span>
-            </div>
+          <img src="/logo.png" alt="logo" className="size-9 shrink-0 mr-2" />
+          <div className="text-xl font-bold">
+            <span className="text-[#90ddaa] font-tektur ">Easy</span>
+            <span className="text-[#b180f0] font-tektur ">Judge</span>
           </div>
+        </div>
         <ChevronLeft
           onClick={() => setSideBarShow(false)}
           className="ml-auto cursor-pointer opacity-70"

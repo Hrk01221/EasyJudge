@@ -143,7 +143,7 @@ const ResetPassword = () => {
   }, [isLoggedin]);
 
   return (
-    <div className="h-screen w-100vw flex items-center justify-center bg-slate-50">
+    <div className="h-screen w-100vw flex items-center justify-center bg-slate-50 overflow-hidden">
       <div className="absolute top-5 left-5 flex items-center gap-1">
         <img src="/logo.png" alt="logo" className="size-11 shrink-0 mr-2" />
         <div className="text-2xl font-bold">

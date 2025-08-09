@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 import transporter from "../config/nodemailer.js";
+import pendingUserModel from "../models/pendingUser.js";
 
 const validateEmail = (email) => /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
 const validatePassword = (password) =>
@@ -58,7 +59,8 @@ const createWelcomeEmail = (userName) => `
 <body>
     <div class="container">
         <div class="header">
-          <a href='https://postimg.cc/MM4J12N5' target='_blank'><img src='https://i.postimg.cc/MM4J12N5/logo.png' border='0' alt='logo style="height:40px'/></a> 
+        <a href="https://freeimage.host/i/FLn4yua" target='_blank'><img src="https://iili.io/FLn4yua.md.png" alt="FLn4yua.md.png" border="0" alt = "logo" style = "height:40px"></a>
+          
           <h2>EasyJudge</h2>
         </div>
         <hr style="border: 1px solid #ddd; margin: 5px 0;">
@@ -99,7 +101,7 @@ const createWelcomeEmail = (userName) => `
 </html>
 `;
 
-export const register = async (req, res) => {
+export const validateInfoAndSendOtp = async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
 
   // Check for missing fields
@@ -138,10 +140,68 @@ export const register = async (req, res) => {
       return res.json({ success: false, message: "User Email already exists" });
     }
 
-    // Hash Password and Create New User
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new userModel({ name, email, password: hashedPassword });
+    await pendingUserModel.deleteOne({ email });
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
+    const passwordHash = await bcrypt.hash(password, 10);
+    const Pendinguser = new pendingUserModel({
+      name,
+      email,
+      password: passwordHash,
+      otp,
+      otpExpiry,
+    });
+    await Pendinguser.save();
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: `EasyJudge Account Verification Otp`,
+      text: `Your Otp is ${otp}. It will expire in 5 minutes.`,
+    };
+    await transporter.sendMail(mailOptions).catch((err) => {
+      console.log("Email Error:", err);
+      return res.json({ success: false, message: "Failed to send OTP email" });
+    });
+
+    return res.json({ success: true });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: "Internal server error" });
+  }
+};
+export const verifyEmailRegister = async (req, res) => {
+  const { email, otp } = req.body;
+  try {
+    const Pendinguser = await pendingUserModel.findOne({ email });
+    if (!Pendinguser) {
+      return res.json({
+        success: false,
+        message: "No OTP request found or expired",
+      });
+    }
+    if (Pendinguser.otpExpiry < new Date()) {
+      await Pendinguser.deleteOne({ email });
+      return res.json({
+        success: false,
+        message: "OTP Expired",
+      });
+    }
+    if (Pendinguser.otp !== otp) {
+      return res.json({
+        success: false,
+        message: "Invalid OTP",
+      });
+    }
+    const user = new userModel({
+      name: Pendinguser.name,
+      email: Pendinguser.email,
+      password: Pendinguser.password,
+      isAccountVerified: true,
+    });
     await user.save();
+
+    await pendingUserModel.deleteOne({ email });
 
     // Create JWT Token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -159,20 +219,33 @@ export const register = async (req, res) => {
     //sending welcome email
     const mailOptions = {
       from: process.env.SENDER_EMAIL,
-      to: email,
+      to: Pendinguser.email,
       subject: `Welcome to EasyJudge`,
-      html: createWelcomeEmail(name),
+      html: createWelcomeEmail(Pendinguser.name),
     };
 
     await transporter.sendMail(mailOptions);
 
     return res.json({ success: true });
-  } catch (error) {
-    console.log(error);
-    return res.json({ success: false, message: "Internal server error" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
-
+export const checkVerifyOtpStatus = async (req, res) => {
+  const { email } = req.query;
+  const pendingUser = await pendingUserModel.findOne({ email });
+  if (!pendingUser) {
+    return res
+      .status(404)
+      .json({ valid: false, message: "OTP expired or not found" });
+  }
+  if (pendingUser.otpExpiry < new Date()) {
+    await pendingUserModel.deleteOne({ email });
+    return res.status(404).json({ valid: false, message: "OTP expired" });
+  }
+  return res.json({ valid: true });
+};
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -218,75 +291,6 @@ export const logout = async (req, res) => {
     return res.json({ success: true, message: "Logged Out Successfully" });
   } catch (error) {
     return res.json({ success: false, message: error.message });
-  }
-};
-
-export const sendVerifyOtp = async (req, res) => {
-  try {
-    const { userId } = req.body;
-    if (!userId) {
-      return res.json({ success: false, message: "User ID is required" });
-    }
-
-    const user = await userModel.findById(userId);
-    if (!user) {
-      return res.json({ success: false, message: "User not found" });
-    }
-
-    if (user.isAccountVerified) {
-      return res.json({ success: false, message: "Account Already Verified" });
-    }
-
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
-    user.verifyOtp = otp;
-    user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
-
-    await user.save().catch((err) => {
-      return res.json({ success: false, message: "Error saving OTP" });
-    });
-
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: user.email,
-      subject: `Account Verification Otp`,
-      text: `Your Otp is ${otp}. It will expire in 24 hours.`,
-    };
-
-    await transporter.sendMail(mailOptions).catch((err) => {
-      console.log("Email Error:", err);
-      return res.json({ success: false, message: "Failed to send OTP email" });
-    });
-
-    return res.json({ success: true, message: "Verification OTP Sent" });
-  } catch (error) {
-    console.log(error);
-    return res.json({ success: false, message: "Internal server error" });
-  }
-};
-
-export const verifyEmail = async (req, res) => {
-  const { userId, otp } = req.body;
-  if (!userId || !otp) {
-    return res.json({ success: false, message: "Missing Details" });
-  }
-  try {
-    const user = await userModel.findById(userId);
-    if (!user) {
-      return res.json({ success: false, message: "User not found" });
-    }
-    if (user.verifyOtp === "" || user.verifyOtp !== otp) {
-      return res.json({ success: false, message: "Invalid Otp" });
-    }
-    if (user.verifyOtpExpireAt < Date.now()) {
-      return res.json({ success: false, message: "OTP Expired" });
-    }
-    user.isAccountVerified = true;
-    user.verifyOtp = "";
-    user.verifyOtpExpireAt = 0;
-    await user.save();
-    return res.json({ success: true, message: "Email Verified Successfully" });
-  } catch (error) {
-    res.json({ success: false, message: error.message });
   }
 };
 

@@ -21,57 +21,50 @@ const Home = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const logout = async () => {
-    setLoading(true);
-    try {
-      const { data } = await axios.post(backendUrl + "/api/auth/logout");
-
-      if (data.success) {
-        setIsLoggedin(false);
-        setUserData(false);
-        toast.success("Logged Out Successfully!", {
-          position: "top-right",
-          autoClose: 1000,
-        });
-
-        setTimeout(() => {
-          navigate("/");
-          setLoading(false);
-        }, 1500);
-      } else {
-        setLoading(false);
-        toast.error(data.error, {
-          position: "top-right",
-          autoClose: 1000,
-        });
-      }
-    } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 1000,
-      });
-      setLoading(false);
-    }
-  };
-
   if (loading) return <Loading />;
 
   return (
+    // <div className={`flex pt-1 ${!isLoggedin ? "bg-[#efefef]" : ""}`}>
     <div className="flex pt-1">
       {isLoggedin && <Sidebar />}
       <div className="flex-1">
         <Navbar />
-        <div
-          className={`p-4 border transition-all duration-400 ease-in-out ${
-            sidebarShow ? "ml-[260px]" : "ml-0"
-          }`}
-        >
-          {Array.from({ length: 200 }).map((_, i) => (
-            <div key={i} className="bg-black text-white p-4 my-2">
-              Welcome to EasyJudge #{i + 1}
+        {isLoggedin ? (
+          <div
+            className={`p-4 border transition-all duration-300 ease-in-out max-h-screen ${
+              sidebarShow ? "ml-[260px]" : "ml-0"
+            }`}
+          >
+            {Array.from({ length: 200 }).map((_, i) => (
+              <div key={i} className="bg-black text-white p-4 my-2">
+                Welcome to EasyJudge #{i + 1}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-row items-center w-full h-[80vh]">
+            <div className="w-1/2 h-full gap-3 bg-transparent flex flex-col items-center justify-center">
+              <span className="text-5xl">
+                Welcome To{" "}
+                <span className="text-[#90ddaa] font-tektur ">Easy</span>
+                <span className="text-[#b180f0] font-tektur ">Judge</span>
+              </span>
+              <span className="text-gray-500 text-base">
+                "Code, Compete, Conquer with EasyJudge."
+              </span>
+              <button className="mt-7 border-2 pl-7 pr-7 pt-2 pb-2 cursor-pointer rounded-2xl transform transition-transform duration-200 hover:scale-110 border-gray-300 hover:bg-gray-300 hover:text-slate-800">
+                Compete
+              </button>
             </div>
-          ))}
-        </div>
+            <div className="w-1/2 h-full flex items-center justify-center ">
+              <img
+                src="welcome2.gif"
+                alt="Welcome gif"
+                className="w-full h-3/5 object-contain"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

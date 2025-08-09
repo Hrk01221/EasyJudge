@@ -27,39 +27,14 @@ const Navbar = () => {
     isLoggedin,
     setIsLoggedin,
     setUserData,
+    page,
+    setPage,
   } = useContext(AppContent);
 
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef();
-  // const sendOtp = async () => {
-  //   setveLoading(true);
-  //   try {
-  //     const { data } = await axios.post(
-  //       backendUrl + "/api/auth/send-verify-otp"
-  //     );
-  //     if (data.success) {
-  //       toast.success("Verification Otp Sent Successfully", {
-  //         position: "top-right",
-  //         autoClose: 1000,
-  //       });
-  //       setveLoading(false);
-  //       navigate("/email-verify");
-  //     } else {
-  //       toast.error(data.error, {
-  //         position: "top-right",
-  //         autoClose: 1000,
-  //       });
-  //       setveLoading(false);
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.catch, {
-  //       position: "top-right",
-  //       autoClose: 1000,
-  //     });
-  //     setveLoading(false);
-  //   }
-  // };
+
   const logout = async () => {
     setLoading(true);
     try {
@@ -71,10 +46,9 @@ const Navbar = () => {
           position: "top-right",
           autoClose: 1000,
         });
-        setTimeout(() => {
-          navigate("/");
-          setLoading(false);
-        }, 1500);
+        navigate("/");
+        setLoading(false);
+        setSideBarShow(false);
       } else {
         setLoading(false);
         toast.error(data.error, {
@@ -98,30 +72,90 @@ const Navbar = () => {
           : "translate-x-0 max-w-[calc(99vw-0px)] ml-2"
       } border rounded-xl rounded-br-none rounded-bl-none flex items-center p-2 transition-transform duration-400 ease-in-out`}
     >
-      <div className="hidden sm:w-1/2 sm:flex gap-10 items-center">
+      <div className="sm:w-3/4 sm:flex gap-10 items-center">
         {!sidebarShow && isLoggedin && (
           <Menu
             className="cursor-pointer opacity-70 ml-5"
             onClick={() => setSideBarShow(true)}
           />
         )}
-        <MoonStar className="cursor-pointer opacity-70 ml-2" />
-        <form className="w-[300px] relative">
-          <input
-            type="search"
-            placeholder="search..."
-            className="w-full p-4 rounded-full border border-[#808080] size-10 focus:outline-none focus:border-gray-800"
-          />
-          <button className="absolute right-1 top-1/2 -translate-y-1/2 p-4">
-            <Search className="size-5 text-[#808080]" />
-          </button>
-        </form>
+        {!sidebarShow && (
+          <div
+            onClick={() => navigate("/")}
+            className="flex items-center gap-1 cursor-pointer ml-2"
+          >
+            <img src="/logo.png" alt="logo" className="size-9 shrink-0 mr-2" />
+            <div className="text-2xl font-bold">
+              <span className="text-[#90ddaa] font-tektur ">Easy</span>
+              <span className="text-[#b180f0] font-tektur ">Judge</span>
+            </div>
+          </div>
+        )}
+        {!sidebarShow && (
+          <div className="ml-20 flex flex-row gap-16 items-center">
+            <div
+              onClick={() => {
+                navigate("/");
+                setPage("Home");
+              }}
+              className={`w-full text-center text-base cursor-pointer transform transition-transform duration-200 hover:scale-110 ${
+                page === "Home"
+                  ? "pl-4 pr-4 pt-1 pb-1 border-[1px] border-slate-300 rounded-xl hover:bg-slate-200"
+                  : ""
+              }`}
+            >
+              Home
+            </div>
+
+            <div
+              onClick={() => {
+                navigate("/"); //change due
+                setPage("Contest");
+              }}
+              className={`w-full text-center text-base cursor-pointer transform transition-transform duration-200 hover:scale-110 ${
+                page === "Contest"
+                  ? "pl-4 pr-4 pt-1 pb-1 border-[1px] border-slate-300 rounded-xl hover:bg-slate-200"
+                  : ""
+              }`}
+            >
+              Contest
+            </div>
+            <div
+              onClick={() => {
+                navigate("/"); //change due
+                setPage("Compiler");
+              }}
+              className={`w-full text-center text-base cursor-pointer transform transition-transform duration-200 hover:scale-110 ${
+                page === "Compiler"
+                  ? "pl-4 pr-4 pt-1 pb-1 border-[1px] border-slate-300 rounded-xl hover:bg-slate-200"
+                  : ""
+              }`}
+            >
+              Compiler
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="w-full sm:w-1/2 flex h-full justify-end mr-2 items-center gap-5">
+        {isLoggedin && !sidebarShow && (
+          <form className="w-[300px] relative">
+            <input
+              type="search"
+              placeholder="search..."
+              className="w-full p-4 rounded-full border border-[#808080] size-10 focus:outline-none focus:border-gray-800"
+            />
+            <button className="absolute right-1 top-1/2 -translate-y-1/2 p-4">
+              <Search className="size-5 text-[#808080]" />
+            </button>
+          </form>
+        )}
+        <div className="rounded-lg border border-[#808080] size-9 items-center flex justify-center cursor-pointer hover:bg-gray-100">
+          <MoonStar className="cursor-pointer size-4 opacity-80" />
+        </div>
         {isLoggedin && (
           <div className="rounded-lg border border-[#808080] size-9 items-center flex justify-center cursor-pointer hover:bg-gray-100">
-            <Bell className="size-4" />
+            <Bell className="cursor-pointer size-4 opacity-80" />
           </div>
         )}
 
@@ -132,11 +166,7 @@ const Navbar = () => {
             className="relative flex justify-center items-center gap-4"
             ref={dropdownRef}
           >
-            <img
-              src="ppic.jpeg"
-              alt=""
-              className="w-10 h-10 border-2 rounded-full"
-            />
+            <img src="ppic.png" alt="" className="w-10 h-10 rounded-full" />
             <span className="text-base font-sans">{userData.name}</span>
             <button
               onClick={() => setIsOpen(!isOpen)}

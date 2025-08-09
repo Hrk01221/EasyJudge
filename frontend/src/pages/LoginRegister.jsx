@@ -34,24 +34,22 @@ const LoginRegister = () => {
       try {
         axios.defaults.withCredentials = true;
         if (!isLogin) {
-          const { data } = await axios.post(backendUrl + "/api/auth/register", {
-            name,
-            email,
-            password,
-            confirmPassword,
-          });
+          const { data } = await axios.post(
+            backendUrl + "/api/auth/validate-user-info-sendotp",
+            {
+              name,
+              email,
+              password,
+              confirmPassword,
+            }
+          );
           if (data.success) {
-            setIsLoggedin(true);
-            await getUserData();
-            toast.success("Registered Successfully!", {
+            localStorage.setItem("verifyEmail", email);
+            toast.success("A verification Otp has been sent!", {
               position: "top-right",
-              autoClose: 1000,
+              autoClose: 2000,
             });
-            toast.info("Please Verify Your Email!", {
-              position: "top-right",
-              autoClose: 1000,
-            });
-            navigate("/");
+            navigate("/email-verify");
           } else {
             toast.error(data.message, {
               position: "top-right",
@@ -79,7 +77,7 @@ const LoginRegister = () => {
           }
         }
       } catch (error) {
-        toast.error(error.message,{
+        toast.error(error.message, {
           position: "top-right",
           autoClose: 1000,
         });
@@ -105,7 +103,7 @@ const LoginRegister = () => {
   }, [isLoggedin]);
 
   return (
-    <div className="h-screen flex">
+    <div className="h-screen flex overflow-hidden">
       <div className=" w-1/2 h-full flex flex-col">
         <div className="w-full h-24 ml-4 mt-4 mb-2">
           <div className="flex items-center gap-1">

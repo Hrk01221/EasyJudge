@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AppContent } from "../context/AppContext";
 import { Loader2 } from "lucide-react";
@@ -12,6 +12,7 @@ const EmailVerify = () => {
   const { backendUrl, userData, isLoggedin, getUserData, loading } =
     useContext(AppContent);
   const [Loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
 
   const handleInput = (e, index) => {
     if (e.target.value.length > 0 && index < inputRefs.current.length - 1) {
@@ -44,49 +45,104 @@ const EmailVerify = () => {
       const otp = otpArray.join("");
       const { data } = await axios.post(
         backendUrl + "/api/auth/verify-account",
-        { otp }
+        { email, otp }
       );
       if (data.success) {
         toast.success("Verified Successfully!", {
           position: "top-right",
           autoClose: 1000,
         });
+        localStorage.removeItem("verifyEmail");
         getUserData();
+        setLoading(false);
         navigate("/");
       } else {
-        toast.error(data.message, {
-          position: "top-right",
-          autoClose: 1000,
-        });
+        toast.error(data.message, { autoClose: 1000 });
+        setLoading(false);
       }
     } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 1000,
-      });
-    } finally {
+      toast.error(error.message, { autoClose: 1000 });
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (loading) return;
-    if (!isLoggedin || userData.isAccountVerified) {
+    const stored = localStorage.getItem("verifyEmail");
+    if (!stored) {
       navigate("/");
+      return;
     }
-  }, [isLoggedin, userData, getUserData]);
+    axios
+      .get(`${backendUrl}/api/auth/verify-otp-status?email=${stored}`)
+      .then((res) => {
+        if (!res.data.valid) {
+          localStorage.removeItem("verifyEmail");
+          navigate("/");
+        } else {
+          setEmail(stored);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem("verifyEmail");
+        navigate("/");
+      });
+  }, []);
 
   return (
-    <div className="h-screen w-100vw flex items-center justify-center bg-slate-50">
-      <div className="absolute top-5 left-5 flex items-center gap-1">
+    <div className="h-screen w-100vw flex items-center justify-center bg-slate-50 overflow-hidden">
+      <div
+        onClick={() => navigate("/")}
+        className="absolute top-5 left-5 flex items-center gap-1 cursor-pointer "
+      >
         <img src="/logo.png" alt="logo" className="size-11 shrink-0 mr-2" />
         <div className="text-2xl font-bold">
           <span className="text-[#90ddaa] font-tektur ">Easy</span>
           <span className="text-[#b180f0] font-tektur ">Judge</span>
         </div>
       </div>
+
+      <div className="w-1/2 h-full bg-transparent flex flex-col justify-center items-center gap-16 ">
+        <div className="flex flex-col items-center">
+          <h1 className="text-black text-3xl font-bold">
+            Account Registration
+          </h1>
+          <p className="text-base text-gray-600 mb-10">
+            Follow the below steps to create your Account
+          </p>
+        </div>
+        <div className=" flex flex-col items-start relative gap-20">
+          {/* Vertical line */}
+          <div className="absolute top-[0.75rem] bottom-0 left-[22px] w-[1.5px] bg-slate-300"></div>
+
+          {/* Step 1 */}
+          <div className="flex items-center gap-4">
+            <div className="rounded-full w-11 h-11 flex items-center justify-center bg-white border border-black z-10">
+              1
+            </div>
+            <span className="text-gray-400">Fillup Registration Info</span>
+          </div>
+
+          {/* Step 2 */}
+          <div className="flex items-center gap-4">
+            <div className="rounded-full w-11 h-11 flex items-center justify-center text-white bg-black border z-10">
+              2
+            </div>
+            <span>Verify your Email</span>
+          </div>
+
+          {/* Step 3 */}
+          <div className="flex items-center gap-4">
+            <div className="rounded-full w-11 h-11 flex items-center justify-center bg-white border border-black z-10 ">
+              3
+            </div>
+            <span className="text-gray-400">Account Registration complete</span>
+          </div>
+        </div>
+      </div>
+
       <div className="w-1/2 h-full flex justify-center items-center">
-        <div className="w-[40vw] h-[70vh] flex flex-col justify-evenly border border-slate-600 rounded-3xl bg-slate-50">
+        <div className="w-[40vw] h-[70vh] flex flex-col border border-slate-600 rounded-3xl bg-slate-50">
           <div className="h-1/4 w-full flex justify-center items-center">
             <h1 className="font-semibold text-3xl">Verify Email</h1>
           </div>
