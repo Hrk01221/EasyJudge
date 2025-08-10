@@ -1,46 +1,38 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Loading from "../components/Loading";
 import { AppContent } from "../context/AppContext";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 
 const Home = () => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
-  const {
-    backendUrl,
-    userData,
-    isLoggedin,
-    setIsLoggedin,
-    setUserData,
-    sidebarShow,
-  } = useContext(AppContent);
-
+  const { isLoggedin, sidebarShow, setPage, page } = useContext(AppContent);
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (page != "Home") {
+      setPage("Home");
+    }
+  }, [location]);
 
   if (loading) return <Loading />;
 
   return (
-    // <div className={`flex pt-1 ${!isLoggedin ? "bg-[#efefef]" : ""}`}>
     <div className="flex pt-1">
       {isLoggedin && <Sidebar />}
       <div className="flex-1">
         <Navbar />
         {isLoggedin ? (
           <div
-            className={`p-4 border transition-all duration-300 ease-in-out max-h-screen ${
+            className={`p-4 transition-all duration-300 ease-in-out max-h-screen ${
               sidebarShow ? "ml-[260px]" : "ml-0"
             }`}
-          >
-            {Array.from({ length: 200 }).map((_, i) => (
-              <div key={i} className="bg-black text-white p-4 my-2">
-                Welcome to EasyJudge #{i + 1}
-              </div>
-            ))}
-          </div>
+          ></div>
         ) : (
           <div className="flex flex-row items-center w-full h-[80vh]">
             <div className="w-1/2 h-full gap-3 bg-transparent flex flex-col items-center justify-center">
@@ -52,7 +44,13 @@ const Home = () => {
               <span className="text-gray-500 text-base">
                 "Code, Compete, Conquer with EasyJudge."
               </span>
-              <button className="mt-7 border-2 pl-7 pr-7 pt-2 pb-2 cursor-pointer rounded-2xl transform transition-transform duration-200 hover:scale-110 border-gray-300 hover:bg-gray-300 hover:text-slate-800">
+              <button
+                onClick={() => {
+                  navigate("/"); //change due
+                  setPage("Contest");
+                }}
+                className="mt-7 border-2 pl-7 pr-7 pt-2 pb-2 cursor-pointer rounded-2xl transform transition-transform duration-200 hover:scale-110 border-gray-300 hover:bg-gray-300 hover:text-slate-800"
+              >
                 Compete
               </button>
             </div>

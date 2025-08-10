@@ -34,7 +34,13 @@ const Navbar = () => {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef();
-
+  const goToPage = (label) => {
+    const lowerFirst = label.charAt(0).toLowerCase() + label.slice(1);
+    console.log(label);
+    setPage(label);
+    if (lowerFirst === "home") navigate("/");
+    else navigate(`/${lowerFirst}`);
+  };
   const logout = async () => {
     setLoading(true);
     try {
@@ -95,8 +101,7 @@ const Navbar = () => {
           <div className="ml-20 flex flex-row gap-16 items-center">
             <div
               onClick={() => {
-                navigate("/");
-                setPage("Home");
+                goToPage("Home");
               }}
               className={`w-full text-center text-base cursor-pointer transform transition-transform duration-200 hover:scale-110 ${
                 page === "Home"
@@ -109,8 +114,7 @@ const Navbar = () => {
 
             <div
               onClick={() => {
-                navigate("/"); //change due
-                setPage("Contest");
+                goToPage("Contest");
               }}
               className={`w-full text-center text-base cursor-pointer transform transition-transform duration-200 hover:scale-110 ${
                 page === "Contest"
@@ -122,8 +126,7 @@ const Navbar = () => {
             </div>
             <div
               onClick={() => {
-                navigate("/"); //change due
-                setPage("Compiler");
+                goToPage("Compiler");
               }}
               className={`w-full text-center text-base cursor-pointer transform transition-transform duration-200 hover:scale-110 ${
                 page === "Compiler"

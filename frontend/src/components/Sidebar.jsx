@@ -16,10 +16,18 @@ import {
   Braces,
   Menu,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const { page, setPage, sidebarShow, setSideBarShow } = useContext(AppContent);
-
+  const navigate = useNavigate();
+  const goToPage = (label) => {
+    const lowerFirst = label.charAt(0).toLowerCase() + label.slice(1);
+    console.log(label);
+    setPage(label);
+    if (lowerFirst === "home") navigate("/");
+    else navigate(`/${lowerFirst}`);
+  };
   const navItems = [
     {
       title: "Main Menu",
@@ -37,7 +45,7 @@ const Sidebar = () => {
       links: [
         { label: "Compiler", icon: LucideCode },
         { label: "Snippets", icon: Scroll },
-        { label: "Text-Case Generator", icon: Braces },
+        { label: "Text-case-generator", icon: Braces },
         { label: "Settings", icon: Settings },
       ],
     },
@@ -46,7 +54,7 @@ const Sidebar = () => {
     {
       title: "Other",
       links: [
-        { label: "Help Center", icon: MessageCircleQuestion },
+        { label: "Help-center", icon: MessageCircleQuestion },
         { label: "FAQ", icon: MessageCircleCode },
       ],
     },
@@ -82,7 +90,9 @@ const Sidebar = () => {
             {section.links.map(({ label, icon: Icon }) => (
               <div
                 key={label}
-                onClick={() => setPage(label)}
+                onClick={() => {
+                  goToPage(label);
+                }}
                 className={`flex items-center justify-between px-4 py-2 rounded-lg cursor-pointer relative
               ${
                 page === label
@@ -118,7 +128,9 @@ const Sidebar = () => {
             {section.links.map(({ label, icon: Icon }) => (
               <div
                 key={label}
-                onClick={() => setPage(label)}
+                onClick={() => {
+                  goToPage(label);
+                }}
                 className={`flex items-center justify-between px-4 py-2 rounded-lg cursor-pointer relative
               ${
                 page === label
