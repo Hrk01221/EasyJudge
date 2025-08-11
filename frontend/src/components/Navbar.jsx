@@ -74,9 +74,9 @@ const Navbar = () => {
     <div
       className={`h-[10vh] w-full sticky top-0 z-40 bg-white shadow-md custom-trans-x-navbar ${
         sidebarShow
-          ? "translate-x-[260px] max-w-[calc(99vw-250px)]"
-          : "translate-x-0 max-w-[calc(99vw-0px)] ml-2"
-      } border rounded-xl rounded-br-none rounded-bl-none flex items-center p-2 transition-transform duration-400 ease-in-out`}
+          ? "translate-x-[260px] max-w-[calc(100vw-250px)]"
+          : "translate-x-0 w-full"
+      } border flex items-center p-2 transition-transform duration-400 ease-in-out`}
     >
       <div className="sm:w-3/4 sm:flex gap-10 items-center">
         {!sidebarShow && isLoggedin && (

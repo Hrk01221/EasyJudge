@@ -23,7 +23,7 @@ const Home = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="flex pt-1">
+    <div className="flex">
       {isLoggedin && <Sidebar />}
       <div className="flex-1">
         <Navbar />
