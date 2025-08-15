@@ -28,19 +28,13 @@ const Navbar = () => {
     setIsLoggedin,
     setUserData,
     page,
-    setPage,
+    goToPage,
   } = useContext(AppContent);
 
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef();
-  const goToPage = (label) => {
-    const lowerFirst = label.charAt(0).toLowerCase() + label.slice(1);
-    console.log(label);
-    setPage(label);
-    if (lowerFirst === "home") navigate("/");
-    else navigate(`/${lowerFirst}`);
-  };
+  
   const logout = async () => {
     setLoading(true);
     try {

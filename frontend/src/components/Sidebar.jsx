@@ -16,23 +16,15 @@ import {
   Braces,
   Menu,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
-  const { page, setPage, sidebarShow, setSideBarShow } = useContext(AppContent);
-  const navigate = useNavigate();
-  const goToPage = (label) => {
-    const lowerFirst = label.charAt(0).toLowerCase() + label.slice(1);
-    console.log(label);
-    setPage(label);
-    if (lowerFirst === "home") navigate("/");
-    else navigate(`/${lowerFirst}`);
-  };
+  const { page, sidebarShow, setSideBarShow, userData, goToPage } =
+    useContext(AppContent);
   const navItems = [
     {
       title: "Main Menu",
       links: [
-        { label: "Dashboard", icon: ShieldUser },
+        ...(userData.isAdmin ? [{ label: "Dashboard", icon: ShieldUser }] : []),
         { label: "Home", icon: Home },
         { label: "Contest", icon: Trophy },
         { label: "Problems", icon: BrainCircuit },

@@ -53,7 +53,7 @@ const EmailVerify = () => {
           autoClose: 1000,
         });
         localStorage.removeItem("verifyEmail");
-        getUserData();
+        await getUserData();
         setLoading(false);
         navigate("/");
       } else {

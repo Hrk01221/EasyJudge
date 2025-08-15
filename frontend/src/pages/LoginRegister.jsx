@@ -63,7 +63,7 @@ const LoginRegister = () => {
           });
           if (data.success) {
             setIsLoggedin(true);
-            await getUserData();
+            console.log(getUserData().name);
             toast.success("Logged In Successfully!", {
               position: "top-right",
               autoClose: 1000,

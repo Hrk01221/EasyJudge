@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export const AppContent = createContext();
@@ -12,7 +13,13 @@ export const AppContextProvider = (props) => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState("Home");
   const [sidebarShow, setSideBarShow] = useState(false);
-
+  const navigate = useNavigate();
+  const goToPage = (label) => {
+    const lowerFirst = label.charAt(0).toLowerCase() + label.slice(1);
+    setPage(label);
+    if (lowerFirst === "home") navigate("/");
+    else navigate(`/${lowerFirst}`);
+  };
   const getAuthState = async () => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
@@ -85,6 +92,7 @@ export const AppContextProvider = (props) => {
     setPage,
     sidebarShow,
     setSideBarShow,
+    goToPage,
   };
 
   return (
