@@ -172,7 +172,7 @@ const Navbar = () => {
 
         <div
           ref={navref}
-          className={`lg:hidden w-[70%] h-screen absolute right-0 top-0 shadow-2xl bg-white ${mobileSidebar ? "translate-x-0":"translate-x-full"} transition-all ease-in duration-100`}
+          className={`lg:hidden w-[70%] h-[125vh] absolute right-0 top-0 shadow-2xl bg-white ${mobileSidebar ? "translate-x-0":"translate-x-full"} transition-all ease-in duration-100`}
         >
           <RiCloseLine
             onClick={() => setMobileSidebar((prev) => !prev)}
