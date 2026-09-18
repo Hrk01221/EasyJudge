@@ -1,5 +1,15 @@
 from pathlib import Path
 import tempfile ,time , subprocess , subprocess, ctypes
+from fastapi import HTTPException , status
+
+def execute_submission(source_code : str , input : str , language : str):
+    if language == "cpp":
+        return run_cpp(source_code,input)
+    else :
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Language not supported"
+        )
 
 def run_cpp(source_code:str , input: str):
 
@@ -34,7 +44,7 @@ def run_cpp(source_code:str , input: str):
         if compile_result.returncode != 0:
             return{
                 "verdict" : "CE",
-                "error" : compile_result.stderr,
+                "error" : compile_result.stderr.split("error: ", 1)[1].split("\n", 1)[0],
                 "execution_time" : "0ms"
             } 
 
@@ -67,7 +77,7 @@ def run_cpp(source_code:str , input: str):
             }
     
     return {
-        "verdict": "AC",
+        "verdict": "ok",
         "output": result.stdout,
         "time": f"{execution_time * 1000:.0f}ms"
     }
