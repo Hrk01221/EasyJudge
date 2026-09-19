@@ -34,7 +34,7 @@ const MonacoEditor = ({ idx, code, setCode }: MonacoEditorProps) => {
       theme="vs"
       onChange={(value) => setCode(value || "")}
       options={{
-        fontSize : isMobile ? 16 : 18,
+        fontSize : isMobile ? 14 : 18,
         fontFamily: "JetBrains Mono",
         fontLigatures: true,
 
