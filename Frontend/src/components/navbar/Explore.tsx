@@ -81,7 +81,7 @@ const Explore = () => {
       </div>
       {/* Dropdown */}
       <div
-        className={`w-100 flex flex-col px-1 py-4 justify-center shadow-xl rounded-xl absolute top-[180%] left-2 bg-white/30 border border-gray-200 gap-2 ${dropDownOpen ? "opacity-100 visible" : "opacity-0 invisible"} transition-all ease-linear duration-300`}
+        className={`w-100 flex flex-col px-1 py-4 justify-center shadow-xl rounded-xl absolute top-[180%] left-2 bg-white border border-gray-200 gap-2 ${dropDownOpen ? "opacity-100 visible" : "opacity-0 invisible"} transition-all ease-linear duration-300`}
       >
         {items.map((item, idx) => {
           const Icon = item.icon;
